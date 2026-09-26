@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction History</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+        }
+
+        .navbar {
+            background: #1f3c88;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f3c88;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #1f3c88;
+            color: white;
+        }
+
+        .fake {
+            color: #b00020;
+            font-weight: bold;
+        }
+
+        .genuine {
+            color: #16733a;
+            font-weight: bold;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 20px;
+            background: #555;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <h2>Fake Job Detection</h2>
+
+        <a href="/predict/">New Analysis</a>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="box">
+
+            <h1>Prediction History</h1>
+
+            {% if history %}
+
+            <table>
+
+                <tr>
+                    <th>Job Title</th>
+                    <th>Result</th>
+                    <th>Date</th>
+                </tr>
+
+                {% for item in history %}
+
+                <tr>
+
+                    <td>{{ item.job_title }}</td>
+
+                    <td>
+                        {% if item.result == "FAKE JOB POSTING" %}
+                            <span class="fake">
+                                ⚠️ {{ item.result }}
+                            </span>
+                        {% else %}
+                            <span class="genuine">
+                                ✓ {{ item.result }}
+                            </span>
+                        {% endif %}
+                    </td>
+
+                   <td>
+    {{ item.created_at|date:"d M Y, h:i A" }}
+</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+            {% else %}
+
+            <p>No prediction history available.</p>
+
+            {% endif %}
+
+            <a href="/dashboard/" class="back-button">
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fake Job Posting Detection</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: #1f3c88;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f3c88;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 18px;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            background: #1f3c88;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #162d66;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            background: #eef3ff;
+        }
+
+        .result h2 {
+            margin: 0;
+            color: #1f3c88;
+        }
+        .fake-result {
+    margin-top: 15px;
+    padding: 15px;
+    background: #ffe5e5;
+    color: #b00020;
+    border-radius: 8px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.genuine-result {
+    margin-top: 15px;
+    padding: 15px;
+    background: #e5f7e9;
+    color: #16733a;
+    border-radius: 8px;
+    font-size: 22px;
+    font-weight: bold;
+}
+.new-analysis-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 22px;
+    background: #555;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.new-analysis-button:hover {
+    background: #333;
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h2>Fake Job Detection</h2>
+
+        <a href="/dashboard/">Back to Dashboard</a>
+    </div>
+
+    <div class="container">
+
+        <div class="box">
+
+            <h1>Fake Job Posting Detection System</h1>
+
+            <p class="description">
+                Enter the job posting details below to analyze whether
+                the job posting is fake or genuine.
+            </p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label for="title">Job Title</label>
+
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Example: Software Developer"
+                    required
+                >
+
+
+                <label for="company_profile">Company Profile</label>
+
+                <textarea
+                    id="company_profile"
+                    name="company_profile"
+                    placeholder="Enter company information..."
+                ></textarea>
+
+
+                <label for="description">Job Description</label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Enter the job description..."
+                    required
+                ></textarea>
+
+
+                <label for="requirements">Requirements</label>
+
+                <textarea
+                    id="requirements"
+                    name="requirements"
+                    placeholder="Enter required skills, qualifications and experience..."
+                ></textarea>
+
+
+                <label for="benefits">Benefits</label>
+
+                <textarea
+                    id="benefits"
+                    name="benefits"
+                    placeholder="Enter salary, benefits and other information..."
+                ></textarea>
+
+
+                <button type="submit" class="button">
+                    Analyze Job Posting
+                </button>
+
+            </form>
+
+{% if result %}
+
+<div class="result">
+
+    <h2>Prediction Result</h2>
+
+    {% if result == "FAKE JOB POSTING" %}
+
+        <div class="fake-result">
+            ⚠️ FAKE JOB POSTING
+        </div>
+
+        <p>
+            This job posting has been classified as potentially fraudulent
+            by the machine learning model.
+        </p>
+
+    {% else %}
+
+        <div class="genuine-result">
+            ✓ GENUINE JOB POSTING
+        </div>
+
+        <p>
+            This job posting has been classified as genuine
+            by the machine learning model.
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+<a href="/predict/" class="new-analysis-button">
+    Analyze Another Job
+</a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

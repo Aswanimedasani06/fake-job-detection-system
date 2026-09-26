@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Fake Job Detection</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f7fb;
+
+            color: #1e293b;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            background: #1f3c88;
+
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .logo {
+
+            font-size: 21px;
+
+            font-weight: bold;
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 25px;
+        }
+
+
+        .nav-links a {
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        .nav-links a:hover {
+
+            opacity: 0.8;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1200px;
+
+            margin: 40px auto;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .welcome {
+
+            margin-bottom: 30px;
+        }
+
+
+        .welcome h1 {
+
+            margin-bottom: 8px;
+
+            color: #1f3c88;
+
+            font-size: 30px;
+        }
+
+
+        .welcome p {
+
+            color: #64748b;
+
+            margin: 0;
+        }
+
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+        }
+
+
+        .stat-title {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .stat-number {
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            color: #1f3c88;
+        }
+
+
+        .stat-description {
+
+            margin-top: 8px;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           MAIN GRID
+        ========================= */
+
+        .main-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.5fr 1fr;
+
+            gap: 25px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .analytics-card,
+        .quick-card {
+
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+        }
+
+
+        .analytics-card h2,
+        .quick-card h2 {
+
+            margin-top: 0;
+
+            color: #1f3c88;
+        }
+
+
+        .subtitle {
+
+            color: #64748b;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =========================
+           ANALYTICS
+        ========================= */
+
+        .analytics-row {
+
+            margin-bottom: 28px;
+        }
+
+
+        .analytics-label {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+
+        .analytics-label span {
+
+            font-weight: 600;
+
+            color: #334155;
+        }
+
+
+        .analytics-label strong {
+
+            color: #1f3c88;
+        }
+
+
+        .progress-background {
+
+            width: 100%;
+
+            height: 18px;
+
+            background: #e2e8f0;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .progress-genuine {
+
+            height: 100%;
+
+            background: #16a34a;
+
+            border-radius: 20px;
+
+            transition: width 0.5s ease;
+        }
+
+
+        .progress-fake {
+
+            height: 100%;
+
+            background: #dc2626;
+
+            border-radius: 20px;
+
+            transition: width 0.5s ease;
+        }
+
+
+        .percentage {
+
+            margin-top: 7px;
+
+            text-align: right;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .quick-card p {
+
+            color: #64748b;
+
+            line-height: 1.6;
+        }
+
+
+        .action-button {
+
+            display: block;
+
+            padding: 13px 18px;
+
+            margin-top: 14px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            text-align: center;
+        }
+
+
+        .primary-button {
+
+            background: #1f3c88;
+
+            color: white;
+        }
+
+
+        .secondary-button {
+
+            background: #eef4ff;
+
+            color: #1f3c88;
+        }
+
+
+        /* =========================
+           RECENT PREDICTIONS
+        ========================= */
+
+        .recent-card {
+
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+
+            margin-bottom: 30px;
+        }
+
+
+        .recent-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+
+        .recent-header h2 {
+
+            margin: 0;
+
+            color: #1f3c88;
+        }
+
+
+        .recent-header p {
+
+            color: #64748b;
+
+            margin-top: 6px;
+        }
+
+
+        .view-history {
+
+            color: #1f3c88;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        .recent-row {
+
+            display: grid;
+
+            grid-template-columns:
+                1.5fr 1fr 0.8fr;
+
+            gap: 20px;
+
+            align-items: center;
+
+            padding: 18px 5px;
+
+            border-top: 1px solid #e2e8f0;
+        }
+
+
+        .recent-job {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .job-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eef4ff;
+
+            border-radius: 10px;
+
+            font-size: 20px;
+        }
+
+
+        .recent-job strong {
+
+            display: block;
+
+            color: #334155;
+        }
+
+
+        .recent-job small {
+
+            display: block;
+
+            margin-top: 5px;
+
+            color: #64748b;
+        }
+
+
+        /* STATUS */
+
+        .recent-status {
+
+            display: inline-block;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        .genuine-status {
+
+            background: #dcfce7;
+
+            color: #15803d;
+        }
+
+
+        .fake-status {
+
+            background: #fee2e2;
+
+            color: #dc2626;
+        }
+
+
+        .details-link {
+
+            color: #1f3c88;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .details-link:hover {
+
+            text-decoration: underline;
+        }
+
+
+        .no-recent {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #64748b;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+                padding: 18px;
+            }
+
+
+            .nav-links {
+
+                gap: 12px;
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .main-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .recent-row {
+
+                grid-template-columns: 1fr;
+
+                gap: 12px;
+            }
+
+
+            .recent-header {
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+            .chart-container {
+    width: 100%;
+    height: 280px;
+    margin-top: 25px;
+    position: relative;
+}
+.trend-card {
+    margin-top: 25px;
+}
+
+.trend-container {
+    width: 100%;
+    height: 300px;
+    margin-top: 25px;
+    position: relative;
+}
+
+        }
+        .navbar {
+    background: #1f3c88;
+    color: white;
+
+    padding: 16px 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 22px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    font-size: 13px;
+}
+
+.logout-btn {
+    color: white;
+    text-decoration: none;
+
+    padding: 8px 14px;
+
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 7px;
+
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🛡️ Fake Job Detection
+    </div>
+
+
+    <div class="nav-links">
+
+       <nav class="navbar">
+
+    <div class="logo">
+        🛡️ Fake Job Detection
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'predict' %}">
+            Predict
+        </a>
+
+        <a href="{% url 'history' %}">
+            History
+        </a>
+
+    </div>
+
+    <div class="user-section">
+
+        <span>
+            Welcome, {{ request.user.username }}
+        </span>
+
+        <a
+            href="{% url 'logout' %}"
+            class="logout-btn"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h1>
+            Welcome to Your Dashboard
+        </h1>
+
+        <p>
+            Analyze job postings using Natural Language Processing
+            and Machine Learning.
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    <div class="stats">
+
+
+        <!-- TOTAL -->
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Predictions
+            </div>
+
+            <div class="stat-number">
+                {{ total_predictions }}
+            </div>
+
+            <div class="stat-description">
+                Total job postings analyzed
+            </div>
+
+        </div>
+
+
+        <!-- GENUINE -->
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Genuine Jobs
+            </div>
+
+            <div class="stat-number">
+                {{ genuine_predictions }}
+            </div>
+
+            <div class="stat-description">
+                Classified as genuine
+            </div>
+
+        </div>
+
+
+        <!-- FAKE -->
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Potentially Fake Jobs
+            </div>
+
+            <div class="stat-number">
+                {{ fake_predictions }}
+            </div>
+
+            <div class="stat-description">
+                Flagged by the model
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         ANALYTICS + ACTIONS
+    ========================= -->
+
+    <div class="main-grid">
+
+
+        <!-- ANALYTICS -->
+
+        <div class="analytics-card">
+
+    <h2>Prediction Analytics</h2>
+
+    <p class="subtitle">
+        Genuine vs potentially fake job postings
+    </p>
+
+    <div class="chart-container">
+        <canvas id="predictionChart"></canvas>
+    </div>
+
+</div>
+
+
+<div class="analytics-card trend-card">
+
+    <h2>Prediction Trends</h2>
+
+    <p class="subtitle">
+        Number of job postings analyzed over time
+    </p>
+
+    <div class="trend-container">
+        <canvas id="trendChart"></canvas>
+    </div>
+
+</div>
+
+            <!-- GENUINE -->
+
+            <div class="analytics-row">
+
+                <div class="analytics-label">
+
+                    <span>
+                        Genuine Jobs
+                    </span>
+
+                    <strong>
+                        {{ genuine_predictions }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress-genuine"
+                        style="width: {{ genuine_percentage }}%;">
+                    </div>
+
+                </div>
+
+
+                <div class="percentage">
+
+                    {{ genuine_percentage }}% Genuine
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FAKE -->
+
+            <div class="analytics-row">
+
+                <div class="analytics-label">
+
+                    <span>
+                        Potentially Fake Jobs
+                    </span>
+
+                    <strong>
+                        {{ fake_predictions }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        class="progress-fake"
+                        style="width: {{ fake_percentage }}%;">
+                    </div>
+
+                </div>
+
+
+                <div class="percentage">
+
+                    {{ fake_percentage }}% Potentially Fake
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="quick-card">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <p>
+                Start analyzing a new job posting or
+                review your previous predictions.
+            </p>
+
+
+            <a
+                href="{% url 'predict' %}"
+                class="action-button primary-button">
+
+                🔍 Analyze Job Posting
+
+            </a>
+
+
+            <a
+                href="{% url 'history' %}"
+                class="action-button secondary-button">
+
+                📋 View Prediction History
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         RECENT PREDICTIONS
+    ========================= -->
+
+    <div class="recent-card">
+
+
+        <div class="recent-header">
+
+            <div>
+
+                <h2>
+                    Recent Predictions
+                </h2>
+
+                <p>
+                    Latest analyzed job postings
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'history' %}"
+                class="view-history">
+
+                View All →
+
+            </a>
+
+        </div>
+
+
+
+        {% if recent_predictions %}
+
+
+            {% for item in recent_predictions %}
+
+
+            <div class="recent-row">
+
+
+                <!-- JOB -->
+
+                <div class="recent-job">
+
+                    <div class="job-icon">
+                        💼
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            {{ item.job_title }}
+                        </strong>
+
+                        <small>
+
+                            {{ item.created_at|date:"d M Y, h:i A" }}
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESULT -->
+
+                <div>
+
+                    {% if "FAKE" in item.result %}
+
+                        <span
+                            class="recent-status fake-status">
+
+                            ⚠ Potentially Fake
+
+                        </span>
+
+                    {% else %}
+
+                        <span
+                            class="recent-status genuine-status">
+
+                            ✓ Genuine
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- DETAILS -->
+
+                <div>
+
+                    <a
+                        href="{% url 'prediction_detail' item.id %}"
+                        class="details-link">
+
+                        View Details →
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <div class="no-recent">
+
+                <p>
+                    No predictions have been made yet.
+                </p>
+
+
+                <a
+                    href="{% url 'predict' %}"
+                    class="action-button primary-button">
+
+                    Analyze a Job Posting
+
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <strong>
+        Fake Job Posting Detection System
+    </strong>
+
+    <br><br>
+
+    NLP • Machine Learning • Django • Cloud Deployment
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    const genuineCount = {{ genuine_predictions|default:0 }};
+    const fakeCount = {{ fake_predictions|default:0 }};
+
+    const ctx = document
+        .getElementById("predictionChart")
+        .getContext("2d");
+
+    new Chart(ctx, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+                "Genuine Jobs",
+                "Potentially Fake Jobs"
+            ],
+
+            datasets: [{
+
+                data: [
+                    genuineCount,
+                    fakeCount
+                ]
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    position: "bottom"
+
+                }
+
+            }
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+
+</html>
+<script>
+
+const trendLabels = {{ trend_labels|safe }};
+const trendValues = {{ trend_values|safe }};
+
+const trendCanvas = document
+    .getElementById("trendChart")
+    .getContext("2d");
+
+new Chart(trendCanvas, {
+
+    type: "line",
+
+    data: {
+
+        labels: trendLabels,
+
+        datasets: [{
+
+            label: "Predictions",
+
+            data: trendValues,
+
+            fill: false,
+
+            tension: 0.3
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true,
+
+                ticks: {
+                    precision: 0
+                }
+
+            }
+
+        },
+
+        plugins: {
+
+            legend: {
+                display: true
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

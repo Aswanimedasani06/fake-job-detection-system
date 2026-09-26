@@ -1,0 +1,1 @@
+web: gunicorn fake_job_project.wsgi

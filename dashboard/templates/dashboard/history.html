@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction History | Fake Job Detection</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #1f3c88;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin-bottom: 8px;
+            color: #1f3c88;
+        }
+
+        .page-header p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* CARD */
+
+        .history-card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        /* SEARCH */
+
+        .filter-area {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 230px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 13px 16px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #1f3c88;
+        }
+
+        .filter-select {
+            padding: 13px 16px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            background: white;
+            min-width: 190px;
+            font-size: 14px;
+        }
+
+        .search-button {
+            padding: 13px 22px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: #1f3c88;
+            color: white;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+
+            text-align: left;
+            padding: 15px;
+
+            font-size: 13px;
+
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 17px 15px;
+
+            border-bottom: 1px solid #e2e8f0;
+
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* JOB */
+
+        .job-title {
+            font-weight: bold;
+            color: #334155;
+        }
+
+        /* RESULT */
+
+        .status {
+            display: inline-block;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .genuine {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .fake {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* CONFIDENCE */
+
+        .confidence {
+            font-weight: bold;
+            color: #1f3c88;
+        }
+
+        /* ACTIONS */
+
+        .action-link {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            margin-right: 12px;
+        }
+
+        .view-link {
+            color: #1f3c88;
+        }
+
+        .delete-link {
+            color: #dc2626;
+        }
+
+        /* PAGINATION */
+
+        .pagination {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 30px;
+        }
+
+        .pagination a,
+        .pagination span {
+            min-width: 38px;
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pagination a {
+            background: #eef4ff;
+            color: #1f3c88;
+        }
+
+        .pagination a:hover {
+            background: #dbe7ff;
+        }
+
+        .pagination .current {
+            background: #1f3c88;
+            color: white;
+        }
+
+        .pagination .disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        /* EMPTY */
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state h3 {
+            color: #334155;
+        }
+
+        .predict-button {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 12px 20px;
+
+            background: #1f3c88;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 18px;
+            }
+
+            .nav-links {
+                gap: 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .history-card {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🛡️ Fake Job Detection
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'predict' %}">
+            Predict
+        </a>
+
+        <a href="{% url 'history' %}">
+            History
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+
+    <div class="page-header">
+
+        <h1>
+            Prediction History
+        </h1>
+
+        <p>
+            View and search previously analyzed job postings.
+        </p>
+
+    </div>
+
+
+
+    <div class="history-card">
+
+
+        <!-- SEARCH -->
+
+        <form method="GET"
+              action="{% url 'history' %}"
+              class="filter-area">
+
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="🔍 Search job title..."
+                    value="{{ search_query }}"
+                >
+
+            </div>
+
+
+            <select
+                name="result"
+                class="filter-select"
+            >
+
+                <option value="">
+                    All Results
+                </option>
+
+                <option
+                    value="GENUINE JOB POSTING"
+                    {% if result_filter == "GENUINE JOB POSTING" %}
+                        selected
+                    {% endif %}
+                >
+                    Genuine
+                </option>
+
+                <option
+                    value="FAKE JOB POSTING"
+                    {% if result_filter == "FAKE JOB POSTING" %}
+                        selected
+                    {% endif %}
+                >
+                    Potentially Fake
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="search-button"
+            >
+                Search
+            </button>
+
+        </form>
+
+
+
+        <!-- TABLE -->
+
+        {% if prediction_history %}
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Job Title
+                        </th>
+
+                        <th>
+                            Result
+                        </th>
+
+                        <th>
+                            Confidence
+                        </th>
+
+                        <th>
+                            Date & Time
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for item in prediction_history %}
+
+                    <tr>
+
+
+                        <td>
+
+                            <span class="job-title">
+                                {{ item.job_title }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if "FAKE" in item.result %}
+
+                                <span class="status fake">
+                                    ⚠ Potentially Fake
+                                </span>
+
+                            {% else %}
+
+                                <span class="status genuine">
+                                    ✓ Genuine
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="confidence">
+                                {{ item.confidence|floatformat:2 }}%
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {{ item.created_at|date:"d M Y, h:i A" }}
+
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                href="{% url 'prediction_detail' item.id %}"
+                                class="action-link view-link"
+                            >
+                                View
+                            </a>
+
+
+                            <a
+                                href="{% url 'delete_prediction' item.id %}"
+                                class="action-link delete-link"
+                                onclick="return confirm('Are you sure you want to delete this prediction?');"
+                            >
+                                Delete
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <!-- PAGINATION -->
+
+        {% if prediction_history.has_other_pages %}
+
+        <div class="pagination">
+
+
+            {% if prediction_history.has_previous %}
+
+                <a
+                    href="?page={{ prediction_history.previous_page_number }}&search={{ search_query|urlencode }}&result={{ result_filter|urlencode }}"
+                >
+                    ←
+                </a>
+
+            {% else %}
+
+                <span class="disabled">
+                    ←
+                </span>
+
+            {% endif %}
+
+
+
+            {% for page_num in prediction_history.paginator.page_range %}
+
+                {% if page_num == prediction_history.number %}
+
+                    <span class="current">
+                        {{ page_num }}
+                    </span>
+
+                {% else %}
+
+                    <a
+                        href="?page={{ page_num }}&search={{ search_query|urlencode }}&result={{ result_filter|urlencode }}"
+                    >
+                        {{ page_num }}
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+
+            {% if prediction_history.has_next %}
+
+                <a
+                    href="?page={{ prediction_history.next_page_number }}&search={{ search_query|urlencode }}&result={{ result_filter|urlencode }}"
+                >
+                    →
+                </a>
+
+            {% else %}
+
+                <span class="disabled">
+                    →
+                </span>
+
+            {% endif %}
+
+
+        </div>
+
+        {% endif %}
+
+
+        {% else %}
+
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty-state">
+
+            <h3>
+                No predictions found
+            </h3>
+
+            <p>
+                Try another search or analyze a new job posting.
+            </p>
+
+            <a
+                href="{% url 'predict' %}"
+                class="predict-button"
+            >
+                Analyze a Job Posting
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

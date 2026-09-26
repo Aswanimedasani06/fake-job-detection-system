@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction Details | Fake Job Detection</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+        .navbar {
+            background: #1f3c88;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #1f3c88;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        .card h2 {
+            color: #1f3c88;
+            margin-top: 0;
+        }
+
+        .field {
+            margin-bottom: 22px;
+        }
+
+        .field-title {
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .field-content {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .result {
+            text-align: center;
+        }
+
+        .genuine {
+            color: #15803d;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .fake {
+            color: #dc2626;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .confidence {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .date {
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 22px;
+
+            background: #1f3c88;
+            color: white;
+
+            text-decoration: none;
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+        .back-button:hover {
+            background: #162d68;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 18px;
+            }
+
+            .nav-links a {
+                margin: 0 8px;
+                font-size: 13px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🛡️ Fake Job Detection
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'home' %}">Home</a>
+
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+
+        <a href="{% url 'predict' %}">Predict</a>
+
+        <a href="{% url 'history' %}">History</a>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+
+    <div class="header">
+
+        <h1>
+            Prediction Details
+        </h1>
+
+        <p>
+            Complete information about the analyzed job posting.
+        </p>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div class="card result">
+
+        <h2>
+            Prediction Result
+        </h2>
+
+
+        {% if "FAKE" in prediction.result %}
+
+            <div class="fake">
+                ⚠️ POTENTIALLY FAKE JOB POSTING
+            </div>
+
+        {% else %}
+
+            <div class="genuine">
+                ✅ GENUINE JOB POSTING
+            </div>
+
+        {% endif %}
+
+
+        {% if prediction.confidence %}
+
+        <div class="confidence">
+
+            Confidence:
+            {{ prediction.confidence }}%
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="date">
+
+            Analyzed on:
+            {{ prediction.created_at|date:"d M Y, h:i A" }}
+
+        </div>
+
+    </div>
+
+
+    <!-- JOB INFORMATION -->
+
+    <div class="card">
+
+        <h2>
+            Job Information
+        </h2>
+
+
+        <div class="field">
+
+            <div class="field-title">
+                Job Title
+            </div>
+
+            <div class="field-content">
+                {{ prediction.job_title }}
+            </div>
+
+        </div>
+
+
+        <div class="field">
+
+            <div class="field-title">
+                Company Profile
+            </div>
+
+            <div class="field-content">
+
+                {% if prediction.company_profile %}
+
+                    {{ prediction.company_profile }}
+
+                {% else %}
+
+                    Not provided.
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="field">
+
+            <div class="field-title">
+                Job Description
+            </div>
+
+            <div class="field-content">
+
+                {% if prediction.job_description %}
+
+                    {{ prediction.job_description }}
+
+                {% else %}
+
+                    Not provided.
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="field">
+
+            <div class="field-title">
+                Requirements
+            </div>
+
+            <div class="field-content">
+
+                {% if prediction.requirements %}
+
+                    {{ prediction.requirements }}
+
+                {% else %}
+
+                    Not provided.
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="field">
+
+            <div class="field-title">
+                Benefits
+            </div>
+
+            <div class="field-content">
+
+                {% if prediction.benefits %}
+
+                    {{ prediction.benefits }}
+
+                {% else %}
+
+                    Not provided.
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="{% url 'history' %}"
+        class="back-button">
+
+        ← Back
