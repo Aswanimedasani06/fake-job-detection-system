@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics | Fake Job Detection</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            width: 220px;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-top: 45px;
+            margin-bottom: 20px;
+        }
+
+        .chart-box {
+            background: white;
+            margin: 30px auto;
+            padding: 25px;
+            max-width: 700px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Prediction Analytics</h1>
+
+        <!-- Prediction Statistics -->
+
+        <h2 class="section-title">Prediction Statistics</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h2>Total Predictions</h2>
+                <div class="number">{{ total }}</div>
+            </div>
+
+            <div class="card">
+                <h2>Fake Jobs</h2>
+                <div class="number">{{ fake_count }}</div>
+            </div>
+
+            <div class="card">
+                <h2>Genuine Jobs</h2>
+                <div class="number">{{ genuine_count }}</div>
+            </div>
+
+            <div class="card">
+                <h2>Fake Percentage</h2>
+                <div class="number">{{ fake_percentage }}%</div>
+            </div>
+
+        </div>
+
+
+        <!-- ML Model Performance -->
+
+        <h2 class="section-title">ML Model Performance</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h2>Accuracy</h2>
+                <div class="number">{{ accuracy }}%</div>
+            </div>
+
+            <div class="card">
+                <h2>Precision</h2>
+                <div class="number">{{ precision }}%</div>
+            </div>
+
+            <div class="card">
+                <h2>Recall</h2>
+                <div class="number">{{ recall }}%</div>
+            </div>
+
+            <div class="card">
+                <h2>F1 Score</h2>
+                <div class="number">{{ f1_score }}%</div>
+            </div>
+
+        </div>
+
+
+        <!-- Chart -->
+
+        <div class="chart-box">
+
+            <h2>Fake vs Genuine Jobs</h2>
+
+            <canvas id="jobChart"></canvas>
+
+        </div>
+
+
+        <a class="back" href="/dashboard/">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <script>
+
+        const fakeJobs = {{ fake_count }};
+        const genuineJobs = {{ genuine_count }};
+
+        const ctx = document.getElementById("jobChart");
+
+        new Chart(ctx, {
+
+            type: "bar",
+
+            data: {
+
+                labels: [
+                    "Fake Jobs",
+                    "Genuine Jobs"
+                ],
+
+                datasets: [{
+
+                    label: "Number of Predictions",
+
+                    data: [
+                        fakeJobs,
+                        genuineJobs
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+                            stepSize: 1
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

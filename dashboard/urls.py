@@ -13,7 +13,7 @@ urlpatterns = [
 
     path("predict/", views.predict, name="predict"),
 
-    path("history/", views.history, name="history"),
+    path("history/",views.history, name="history"),
     path(
     "delete/<int:prediction_id>/",
     views.delete_prediction,
@@ -25,4 +25,5 @@ path(
     name="prediction_detail"
 ),
 path("logout/", views.logout_view, name="logout"),
+path("analytics/",views.analytics, name="analytics"),
 ]

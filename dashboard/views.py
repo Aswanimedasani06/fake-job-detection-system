@@ -8,6 +8,7 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.contrib.auth.decorators import login_required
 import os
+import json
 import joblib
 MODEL_PATH = os.path.join(
     os.path.dirname(os.path.dirname(__file__)),
@@ -305,6 +306,89 @@ def prediction_detail(request, prediction_id):
 def logout_view(request):
     logout(request)
     return redirect("login")
+def predict_job(request):
+    if request.method == "POST":
+
+        title = request.POST.get("title", "")
+        company_profile = request.POST.get("company_profile", "")
+        description = request.POST.get("description", "")
+        requirements = request.POST.get("requirements", "")
+        benefits = request.POST.get("benefits", "")
+
+        job_text = " ".join([
+            title,
+            company_profile,
+            description,
+            requirements,
+            benefits
+        ])
+
+        if job_text.strip():
+
+            prediction = model.predict([job_text])[0]
+
+            if prediction == 1:
+                result = "FAKE JOB POSTING"
+            else:
+                result = "REAL JOB POSTING"
+
+            return render(request, "dashboard/dashboard.html", {
+                "result": result
+            })
+
+    return render(request, "dashboard/dashboard.html")
+def analytics(request):
+    predictions = PredictionHistory.objects.all()
+
+    total = predictions.count()
+    fake_count = predictions.filter(
+        result__icontains="fake"
+    ).count()
+
+    genuine_count = predictions.filter(
+        result__icontains="genuine"
+    ).count()
+
+    fake_percentage = 0
+
+    if total > 0:
+        fake_percentage = round(
+            (fake_count / total) * 100,
+            2
+        )
+
+    # Read ML evaluation metrics
+    metrics_path = os.path.join(
+        "prediction",
+        "metrics.json"
+    )
+
+    metrics = {
+        "accuracy": 0,
+        "precision": 0,
+        "recall": 0,
+        "f1_score": 0
+    }
+
+    if os.path.exists(metrics_path):
+        with open(metrics_path, "r") as file:
+            metrics = json.load(file)
+
+    return render(
+        request,
+        "dashboard/analytics.html",
+        {
+            "total": total,
+            "fake_count": fake_count,
+            "genuine_count": genuine_count,
+            "fake_percentage": fake_percentage,
+
+            "accuracy": metrics["accuracy"],
+            "precision": metrics["precision"],
+            "recall": metrics["recall"],
+            "f1_score": metrics["f1_score"],
+        }
+    )
 
 
 
